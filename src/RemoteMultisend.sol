@@ -30,7 +30,7 @@ contract RemoteMultisend {
 
         if (msg.value != totalAmount) revert IncorrectValue();
 
-        bytes32 sendWethMsgHash = superchainWeth.sendETH(address(this), block.chainid);
+        bytes32 sendWethMsgHash = superchainWeth.sendETH{value: totalAmount}(address(this), _destinationChainId);
 
         return l2ToL2CrossDomainMessenger.sendMessage(
             _destinationChainId, address(this), abi.encodeCall(this.relay, (sendWethMsgHash, _sends))
